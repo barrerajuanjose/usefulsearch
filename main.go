@@ -4,6 +4,9 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/barrerajuanjose/usefulsearch/controller"
+	"github.com/barrerajuanjose/usefulsearch/marshaller"
+	"github.com/barrerajuanjose/usefulsearch/service"
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
 )
@@ -20,9 +23,10 @@ func main() {
 	router.LoadHTMLGlob("templates/*.tmpl.html")
 	router.Static("/static", "static")
 
-	router.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "used_car.tmpl.html", nil)
-	})
+	itemController := controller.NewItemController(marshaller.NewItemMarshaller(), service.NewItemService(), service.NewUserService())
+
+	router.GET("/", itemController.Get)
+
 	router.GET("/autos-usados-mercadolibre-ultima-oportunidad", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "used_car.tmpl.html", nil)
 	})
