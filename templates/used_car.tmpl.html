@@ -15,20 +15,13 @@
 </head>
 
 <body class="bg-light">
-    <div>Shopping List</div>
+    <div>Autos usados en Mercado Libre! Ultima oportunidad para comprarlos</div>
     <table>
-        <tr>
-            <th>Name</th>
-            <th>Quantity</th>
-            <th>Unit</th>
-            <th></th>
-        </tr>
         {{ range .Items }}
         <tr>
-            <td>{{ .Id }}</td>
             <td>{{ .Title }}</td>
             <td>{{ .CurrencyId }} {{ .Price }}</td>
-            <td><a href="{{.Permalink}}">Detail</a></td>
+            <td><a href="{{.Permalink}}">Link a Mercado Libre</a></td>
         </tr>
         {{ end }}
     </table>
