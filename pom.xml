@@ -12,7 +12,7 @@
 	<artifactId>usefulsearch</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>usefulsearch</name>
-	<description>Application with useful searchs</description>
+	<description>Application with useful searches</description>
 	<properties>
 		<java.version>11</java.version>
 		<kotlin.version>1.4.21</kotlin.version>
