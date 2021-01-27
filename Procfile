@@ -1,1 +1,1 @@
-web: java -Djava.port=$PORT -jar target/usefulsearch-0.0.1-SNNAPSHOT.jar
+web: java -Djava.port=$PORT -jar target/usefulsearch-0.0.1-SNAPSHOT.jar
