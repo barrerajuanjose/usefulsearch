@@ -1,7 +1,6 @@
 package main
 
 import (
-	"net/http"
 	"os"
 
 	"github.com/barrerajuanjose/usefulsearch/controller"
@@ -23,13 +22,13 @@ func main() {
 	router.LoadHTMLGlob("templates/*.tmpl.html")
 	router.Static("/static", "static")
 
-	itemController := controller.NewItemController(marshaller.NewItemMarshaller(), service.NewItemService(), service.NewUserService())
+	getUsedCars := controller.NewGetUsedCars(marshaller.NewItem(), service.NewSearch())
 
-	router.GET("/", itemController.Get)
-
-	router.GET("/autos-usados-mercadolibre-ultima-oportunidad", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "used_car.tmpl.html", nil)
+	router.GET("/", func(c *gin.Context) {
+		c.String(200, "OK")
 	})
+
+	router.GET("/autos-usados-mercadolibre-ultima-oportunidad", getUsedCars.Get)
 
 	router.Run(":" + port)
 }
