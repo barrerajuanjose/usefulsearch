@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"net/http"
 	"sync"
 
 	"github.com/barrerajuanjose/usefulsearch/domain"
@@ -43,7 +44,7 @@ func (c getUsedCars) Get(ctx *gin.Context) {
 	}
 
 	searchChan := make(chan []*domain.Item, 1)
-	viewChan := make(chan []*marshaller.ItemDto, 1)
+	viewChan := make(chan *marshaller.ModelDto, 1)
 
 	var wg sync.WaitGroup
 	wg.Add(1)
@@ -63,6 +64,5 @@ func (c getUsedCars) Get(ctx *gin.Context) {
 		viewChan <- c.itemMarshaller.GetView(itemsDomain)
 	}()
 
-	ctx.JSON(200, <-viewChan)
-	//ctx.HTML(http.StatusOK, "used_car.tmpl.html", nil)
+	ctx.HTML(http.StatusOK, "used_car.tmpl.html", <-viewChan)
 }

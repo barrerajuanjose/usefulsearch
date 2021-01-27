@@ -3,7 +3,7 @@
 
 <head profile="http://www.w3.org/2005/10/profile">
     <title>Autos Usados Mercado Libre Útima Oportunidad</title>
-    <meta name="description" content="Publicaciones de autos usados que finalizan hoy, ideales para hacer una oferta!."
+    <meta name="description" content={{.Title}}
         data-head-react="true" />
 
     <link rel="apple-touch-icon" href="/static/favicon.png">
@@ -15,6 +15,22 @@
 </head>
 
 <body class="bg-light">
-    PEPE
+    <div>Shopping List</div>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Unit</th>
+            <th></th>
+        </tr>
+        {{ range .Items }}
+        <tr>
+            <td>{{ .Id }}</td>
+            <td>{{ .Title }}</td>
+            <td>{{ .CurrencyId }} {{ .Price }}</td>
+            <td><a href="{{.Permalink}}">Detail</a></td>
+        </tr>
+        {{ end }}
+    </table>
 </body>
 <html>

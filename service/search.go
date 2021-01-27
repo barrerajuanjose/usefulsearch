@@ -20,7 +20,7 @@ type search struct {
 type searchItemResponse struct {
 	Id         string  `json:"id,omitempty"`
 	Title      string  `json:"title,omitempty"`
-	Price      float32 `json:"price,omitempty"`
+	Price      float64 `json:"price,omitempty"`
 	CurrencyId string  `json:"currency_id,omitempty"`
 	Thumbnail  string  `json:"thumbnail,omitempty"`
 	Permalink  string  `json:"permalink,omitempty"`
