@@ -1,8 +1,10 @@
 package marshaller
 
 import (
-	"fmt"
 	"strings"
+
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 
 	"github.com/barrerajuanjose/usefulsearch/domain"
 )
@@ -37,12 +39,13 @@ func NewItem() Item {
 
 func (m item) GetView(itemsDomain []*domain.Item) *ModelDto {
 	var itemsDto []*ItemDto
+	p := message.NewPrinter(language.BrazilianPortuguese)
 
 	for _, itemDomain := range itemsDomain {
 		itemsDto = append(itemsDto, &ItemDto{
 			Id:         itemDomain.Id,
 			Title:      itemDomain.Title,
-			Price:      fmt.Sprintf("%.2f", itemDomain.Price),
+			Price:      p.Sprintf("%d", int(itemDomain.Price)),
 			CurrencyId: itemDomain.CurrencyId,
 			Thumbnail:  strings.Replace(itemDomain.Thumbnail, "-I", "-O", 1),
 			Permalink:  itemDomain.Permalink,
