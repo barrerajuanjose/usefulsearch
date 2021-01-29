@@ -2,6 +2,7 @@ package marshaller
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/barrerajuanjose/usefulsearch/domain"
 )
@@ -43,7 +44,7 @@ func (m item) GetView(itemsDomain []*domain.Item) *ModelDto {
 			Title:      itemDomain.Title,
 			Price:      fmt.Sprintf("%.2f", itemDomain.Price),
 			CurrencyId: itemDomain.CurrencyId,
-			Thumbnail:  itemDomain.Thumbnail,
+			Thumbnail:  strings.Replace(itemDomain.Thumbnail, "-I", "-O", 1),
 			Permalink:  itemDomain.Permalink,
 			StopTime:   itemDomain.StopTime,
 		})
