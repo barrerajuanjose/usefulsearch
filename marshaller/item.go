@@ -17,8 +17,10 @@ type ItemDto struct {
 }
 
 type ModelDto struct {
-	Title string     `json:"title,omitempty"`
-	Items []*ItemDto `json:"items,omitempty"`
+	PageTitle       string     `json:"page_title,omitempty"`
+	PageDescription string     `json:"page_description,omitempty"`
+	Title           string     `json:"title,omitempty"`
+	Items           []*ItemDto `json:"items,omitempty"`
 }
 
 type Item interface {
@@ -48,7 +50,9 @@ func (m item) GetView(itemsDomain []*domain.Item) *ModelDto {
 	}
 
 	return &ModelDto{
-		Title: "Publicaciones de autos usados que finalizan hoy, ideales para hacer una oferta!.",
-		Items: itemsDto,
+		PageTitle:       "Autos Usados Mercado Libre Útima Oportunidad",
+		PageDescription: "Publicaciones de autos usados que finalizan hoy, ideales para hacer una oferta!.",
+		Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
+		Items:           itemsDto,
 	}
 }

@@ -2,8 +2,8 @@
 <html>
 
 <head profile="http://www.w3.org/2005/10/profile">
-    <title>Autos Usados Mercado Libre Útima Oportunidad</title>
-    <meta name="description" content={{.Title}}
+    <title>{{.PageTitle}}</title>
+    <meta name="description" content={{.PageDescription}}
         data-head-react="true" />
 
     <link rel="apple-touch-icon" href="/static/favicon.png">
@@ -15,7 +15,7 @@
 </head>
 
 <body class="bg-light">
-    <div>Autos usados en Mercado Libre! Ultima oportunidad para comprarlos</div>
+    <div>{{.Title}}</div>
     <table>
         {{ range .Items }}
         <tr>
