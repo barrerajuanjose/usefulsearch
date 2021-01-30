@@ -28,6 +28,23 @@
             </div>
         </nav>
     </div>
+
+    <form class="row g-3">
+        <div class="col-auto">
+            <select class="form-select form-select-lg mb-3" aria-label="Elegí la marca que estás buscando" name="brand" id="brand">
+                {{ range .BrandFilterValues }}
+                    {{if .Selected}}
+                    <option selected>{{.Name}}</option>
+                    {{ end }}
+                    <option value="{{.Value}}">{{.Name}}</option>
+                {{ end }}
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3">Confirm identity</button>
+        </div>
+    </form>
+
     <div class="container-fluid">
         <div class="row">
             {{ range .Items }}

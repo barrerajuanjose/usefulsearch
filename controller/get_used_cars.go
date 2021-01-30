@@ -27,24 +27,24 @@ func NewGetUsedCars(itemMarshaller marshaller.Item, searchService service.Search
 }
 
 func (c getUsedCars) Get(ctx *gin.Context) {
-	siteId := ctx.Param("site_id")
+	siteId := ctx.Query("site_id")
 
 	if siteId == "" {
 		siteId = "MLA"
 	}
 
-	stateId := ctx.Param("state_id")
+	stateId := ctx.Query("state_id")
 	if stateId == "" {
 		stateId = "TUxBUENBUGw3M2E1"
 	}
 
-	category := ctx.Param("category")
+	category := ctx.Query("category")
 	if category == "" {
 		category = "MLA1744"
 	}
 
-	brand := ctx.Param("brand")
-	model := ctx.Param("model")
+	brand := ctx.Query("brand")
+	model := ctx.Query("model")
 
 	searchChan := make(chan *domain.SearchResult, 1)
 	viewChan := make(chan *marshaller.ModelDto, 1)
