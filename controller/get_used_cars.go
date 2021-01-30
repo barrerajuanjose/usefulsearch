@@ -38,12 +38,15 @@ func (c getUsedCars) Get(ctx *gin.Context) {
 		stateId = "TUxBUENBUGw3M2E1"
 	}
 
-	query := ctx.Param("query")
-	if query == "" {
-		query = "MLA1744"
+	category := ctx.Param("category")
+	if category == "" {
+		category = "MLA1744"
 	}
 
-	searchChan := make(chan []*domain.Item, 1)
+	brand := ctx.Param("brand")
+	model := ctx.Param("model")
+
+	searchChan := make(chan *domain.SearchResult, 1)
 	viewChan := make(chan *marshaller.ModelDto, 1)
 
 	var wg sync.WaitGroup
@@ -52,8 +55,8 @@ func (c getUsedCars) Get(ctx *gin.Context) {
 	go func() {
 		defer wg.Done()
 		defer close(searchChan)
-		items := c.searchService.GetEndTodayItems(siteId, stateId, query)
-		searchChan <- items
+		searchResult := c.searchService.GetEndTodayItems(siteId, stateId, category, brand, model)
+		searchChan <- searchResult
 	}()
 
 	go func() {

@@ -49,7 +49,19 @@ func NewSearch() Search {
 }
 
 func (*search) GetEndTodayItems(siteId string, stateId string, category string, brand string, model string) *domain.SearchResult {
-	response, err := http.Get(fmt.Sprintf("https://api.mercadolibre.com/sites/%s/search?limit=50&until=today&state=%s&category=%s&brand=%s&model=%s", siteId, stateId, category, brand, model))
+	brandParam := ""
+	if brand != "" {
+		brandParam = fmt.Sprintf("&brand=%s", brand)
+	}
+
+	modelParam := ""
+	if model != "" {
+		modelParam = fmt.Sprintf("&model=%s", model)
+	}
+
+	fmt.Println(fmt.Sprintf("https://api.mercadolibre.com/sites/%s/search?limit=50&until=today&state=%s&category=%s%s%s", siteId, stateId, category, brandParam, modelParam))
+
+	response, err := http.Get(fmt.Sprintf("https://api.mercadolibre.com/sites/%s/search?limit=50&until=today&state=%s&category=%s%s%s", siteId, stateId, category, brandParam, modelParam))
 	if err != nil {
 		return nil
 	}
@@ -61,8 +73,6 @@ func (*search) GetEndTodayItems(siteId string, stateId string, category string, 
 	if err != nil {
 		return nil
 	}
-
-	var searchResult *domain.SearchResult
 
 	var searchResponse searchResponse
 	_ = json.Unmarshal(respBody, &searchResponse)
@@ -81,11 +91,11 @@ func (*search) GetEndTodayItems(siteId string, stateId string, category string, 
 		})
 	}
 
-	searchResult.Results = items
-	searchResult.Filters = convertToDomainFilter(searchResponse.Filters)
-	searchResult.AvailableFilters = convertToDomainFilter(searchResponse.AvailableFilters)
-
-	return searchResult
+	return &domain.SearchResult{
+		Results:          items,
+		Filters:          convertToDomainFilter(searchResponse.Filters),
+		AvailableFilters: convertToDomainFilter(searchResponse.AvailableFilters),
+	}
 }
 
 func convertToDomainFilter(searchFiltersResponse []searchFilterResponse) []*domain.SearchFilter {

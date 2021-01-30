@@ -27,7 +27,7 @@ type ModelDto struct {
 }
 
 type Item interface {
-	GetView(item []*domain.Item) *ModelDto
+	GetView(searchResult *domain.SearchResult) *ModelDto
 }
 
 type item struct {
@@ -37,11 +37,11 @@ func NewItem() Item {
 	return &item{}
 }
 
-func (m item) GetView(itemsDomain []*domain.Item) *ModelDto {
+func (m item) GetView(searchResult *domain.SearchResult) *ModelDto {
 	var itemsDto []*ItemDto
 	p := message.NewPrinter(language.BrazilianPortuguese)
 
-	for _, itemDomain := range itemsDomain {
+	for _, itemDomain := range searchResult.Results {
 		itemsDto = append(itemsDto, &ItemDto{
 			Id:         itemDomain.Id,
 			Title:      itemDomain.Title,
