@@ -66,7 +66,12 @@ func (*search) GetEndTodayItems(siteId string, stateId string, category string, 
 		modelParam = fmt.Sprintf("&model=%s", model)
 	}
 
-	response, err := http.Get(fmt.Sprintf("https://api.mercadolibre.com/sites/%s/search?limit=50&until=today&state=%s&category=%s%s%s", siteId, stateId, category, brandParam, modelParam))
+	stateParam := ""
+	if stateId != "" {
+		modelParam = fmt.Sprintf("&state=%s", stateId)
+	}
+
+	response, err := http.Get(fmt.Sprintf("https://api.mercadolibre.com/sites/%s/search?limit=50&until=today&category=%s%s%s%s", siteId, category, stateParam, brandParam, modelParam))
 	if err != nil {
 		return nil
 	}

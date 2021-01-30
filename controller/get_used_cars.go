@@ -33,17 +33,23 @@ func (c getUsedCars) Get(ctx *gin.Context) {
 		siteId = "MLA"
 	}
 
-	stateId := ctx.Query("state_id")
-	if stateId == "" {
-		stateId = "TUxBUENBUGw3M2E1"
-	}
-
 	category := ctx.Query("category")
 	if category == "" {
 		category = "MLA1744"
 	}
 
 	brand := ctx.Query("brand")
+	if brand == "clean" {
+		brand = ""
+	}
+
+	stateId := ctx.Query("state_id")
+	if stateId == "" {
+		stateId = "TUxBUENBUGw3M2E1"
+	} else if stateId == "clean" {
+		stateId = ""
+	}
+
 	model := ctx.Query("model")
 
 	searchChan := make(chan *domain.SearchResult, 1)

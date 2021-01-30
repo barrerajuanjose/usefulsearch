@@ -32,6 +32,7 @@ type ModelDto struct {
 	Title             string            `json:"title,omitempty"`
 	Items             []*ItemDto        `json:"items,omitempty"`
 	BrandFilterValues []*FilterValueDto `json:"brand_filter_values,omitempty"`
+	StateFilterValues []*FilterValueDto `json:"state_filter_values,omitempty"`
 }
 
 type Item interface {
@@ -62,12 +63,26 @@ func (m item) GetView(searchResult *domain.SearchResult) *ModelDto {
 		})
 	}
 
-	var brandFilterValues []*FilterValueDto
+	brandFilterValues := buildFilter("BRAND", searchResult.Filters, searchResult.AvailableFilters)
+	stateFilterValues := buildFilter("state", searchResult.Filters, searchResult.AvailableFilters)
 
-	for _, filtersDomaind := range searchResult.Filters {
-		if filtersDomaind.Id == "BRAND" {
+	return &ModelDto{
+		PageTitle:         "Autos Usados Mercado Libre Útima Oportunidad",
+		PageDescription:   "Publicaciones de autos usados que finalizan hoy, ideales para hacer una oferta!.",
+		Title:             "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
+		Items:             itemsDto,
+		BrandFilterValues: brandFilterValues,
+		StateFilterValues: stateFilterValues,
+	}
+}
+
+func buildFilter(filterId string, filters []*domain.SearchFilter, availavleFilters []*domain.SearchFilter) []*FilterValueDto {
+	var filterValues []*FilterValueDto
+
+	for _, filtersDomaind := range filters {
+		if filtersDomaind.Id == filterId {
 			for _, filtersValuesDomaind := range filtersDomaind.Values {
-				brandFilterValues = append(brandFilterValues, &FilterValueDto{
+				filterValues = append(filterValues, &FilterValueDto{
 					Name:     filtersValuesDomaind.Name,
 					Value:    filtersValuesDomaind.Id,
 					Selected: true,
@@ -76,24 +91,24 @@ func (m item) GetView(searchResult *domain.SearchResult) *ModelDto {
 		}
 	}
 
-	if len(brandFilterValues) == 0 {
-		brandFilterValues = append(brandFilterValues, &FilterValueDto{
-			Name:     "Selecciona una marca",
+	if len(filterValues) == 0 {
+		filterValues = append(filterValues, &FilterValueDto{
+			Name:     "Selecciona una opción",
 			Value:    "",
 			Selected: true,
 		})
 	} else {
-		brandFilterValues = append(brandFilterValues, &FilterValueDto{
+		filterValues = append(filterValues, &FilterValueDto{
 			Name:     "Limpar selección",
-			Value:    "",
+			Value:    "clean",
 			Selected: false,
 		})
 	}
 
-	for _, filtersDomaind := range searchResult.AvailableFilters {
-		if filtersDomaind.Id == "BRAND" {
+	for _, filtersDomaind := range availavleFilters {
+		if filtersDomaind.Id == filterId {
 			for _, filtersValuesDomaind := range filtersDomaind.Values {
-				brandFilterValues = append(brandFilterValues, &FilterValueDto{
+				filterValues = append(filterValues, &FilterValueDto{
 					Name:     filtersValuesDomaind.Name,
 					Value:    filtersValuesDomaind.Id,
 					Selected: false,
@@ -102,11 +117,5 @@ func (m item) GetView(searchResult *domain.SearchResult) *ModelDto {
 		}
 	}
 
-	return &ModelDto{
-		PageTitle:         "Autos Usados Mercado Libre Útima Oportunidad",
-		PageDescription:   "Publicaciones de autos usados que finalizan hoy, ideales para hacer una oferta!.",
-		Title:             "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
-		Items:             itemsDto,
-		BrandFilterValues: brandFilterValues,
-	}
+	return filterValues
 }

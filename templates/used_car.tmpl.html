@@ -38,10 +38,22 @@
                     <select class="form-select form-select-lg mb-3" name="brand" id="brandSelect" onchange="this.form.submit()">
                         {{ range .BrandFilterValues }}
                             {{if .Selected}}
-                            <option selected>{{.Name}}</option>
+                            <option selected value="{{.Value}}">{{.Name}}</option>
                             {{ else }}
                             <option value="{{.Value}}">{{.Name}}</option>
                             {{ end }}
+                        {{ end }}
+                    </select>
+                </div>
+                <div class="col-lg-6 col-md-8 mx-auto">
+                    <label for="stateSelect">Donde queres comprarlo</label>
+                    <select class="form-select form-select-lg mb-3" name="state_id" id="stateSelect" onchange="this.form.submit()">
+                        {{ range .StateFilterValues }}
+                        {{if .Selected}}
+                        <option selected value="{{.Value}}">{{.Name}}</option>
+                        {{ else }}
+                        <option value="{{.Value}}">{{.Name}}</option>
+                        {{ end }}
                         {{ end }}
                     </select>
                 </div>
