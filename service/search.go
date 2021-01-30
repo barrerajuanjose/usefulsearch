@@ -18,13 +18,20 @@ type search struct {
 }
 
 type searchItemResponse struct {
-	Id         string  `json:"id,omitempty"`
-	Title      string  `json:"title,omitempty"`
-	Price      float64 `json:"price,omitempty"`
-	CurrencyId string  `json:"currency_id,omitempty"`
-	Thumbnail  string  `json:"thumbnail,omitempty"`
-	Permalink  string  `json:"permalink,omitempty"`
-	StopTime   string  `json:"stop_time,omitempty"`
+	Id         string                         `json:"id,omitempty"`
+	Title      string                         `json:"title,omitempty"`
+	Price      float64                        `json:"price,omitempty"`
+	CurrencyId string                         `json:"currency_id,omitempty"`
+	Thumbnail  string                         `json:"thumbnail,omitempty"`
+	Permalink  string                         `json:"permalink,omitempty"`
+	StopTime   string                         `json:"stop_time,omitempty"`
+	Attributes []*searchItemAttributeResponse `json:"attributes,omitempty"`
+}
+
+type searchItemAttributeResponse struct {
+	Id        string `json:"id,omitempty"`
+	Name      string `json:"name,omitempty"`
+	ValueName string `json:"value_name,omitempty"`
 }
 
 type searchFilterValueResponse struct {
@@ -33,15 +40,15 @@ type searchFilterValueResponse struct {
 }
 
 type searchFilterResponse struct {
-	Id     string                      `json:"id,omitempty"`
-	Name   string                      `json:"name,omitempty"`
-	Values []searchFilterValueResponse `json:"values,omitempty"`
+	Id     string                       `json:"id,omitempty"`
+	Name   string                       `json:"name,omitempty"`
+	Values []*searchFilterValueResponse `json:"values,omitempty"`
 }
 
 type searchResponse struct {
-	Results          []searchItemResponse   `json:"results,omitempty"`
-	Filters          []searchFilterResponse `json:"filters,omitempty"`
-	AvailableFilters []searchFilterResponse `json:"available_filters,omitempty"`
+	Results          []*searchItemResponse   `json:"results,omitempty"`
+	Filters          []*searchFilterResponse `json:"filters,omitempty"`
+	AvailableFilters []*searchFilterResponse `json:"available_filters,omitempty"`
 }
 
 func NewSearch() Search {
@@ -79,13 +86,14 @@ func (*search) GetEndTodayItems(siteId string, stateId string, category string, 
 
 	for _, itemResponse := range searchResponse.Results {
 		items = append(items, &domain.Item{
-			Id:         itemResponse.Id,
-			Title:      itemResponse.Title,
-			Price:      itemResponse.Price,
-			CurrencyId: itemResponse.CurrencyId,
-			Thumbnail:  itemResponse.Thumbnail,
-			Permalink:  itemResponse.Permalink,
-			StopTime:   itemResponse.StopTime,
+			Id:          itemResponse.Id,
+			Title:       itemResponse.Title,
+			Price:       itemResponse.Price,
+			CurrencyId:  itemResponse.CurrencyId,
+			Thumbnail:   itemResponse.Thumbnail,
+			Permalink:   itemResponse.Permalink,
+			StopTime:    itemResponse.StopTime,
+			Description: buildItemDescription(itemResponse.Attributes),
 		})
 	}
 
@@ -96,7 +104,7 @@ func (*search) GetEndTodayItems(siteId string, stateId string, category string, 
 	}
 }
 
-func convertToDomainFilter(searchFiltersResponse []searchFilterResponse) []*domain.SearchFilter {
+func convertToDomainFilter(searchFiltersResponse []*searchFilterResponse) []*domain.SearchFilter {
 	var filters []*domain.SearchFilter
 
 	for _, filterResponse := range searchFiltersResponse {
@@ -117,4 +125,19 @@ func convertToDomainFilter(searchFiltersResponse []searchFilterResponse) []*doma
 	}
 
 	return filters
+}
+
+func buildItemDescription(attributes []*searchItemAttributeResponse) string {
+	kilometers := ""
+	vehicleYear := ""
+
+	for _, attribute := range attributes {
+		if attribute.Id == "VEHICLE_YEAR" {
+			vehicleYear = fmt.Sprintf("%s: %s", attribute.Name, attribute.ValueName)
+		} else if attribute.Id == "KILOMETERS" {
+			kilometers = fmt.Sprintf("%s: %s", attribute.Name, attribute.ValueName)
+		}
+	}
+
+	return fmt.Sprintf("%s - %s", vehicleYear, kilometers)
 }

@@ -10,13 +10,14 @@ import (
 )
 
 type ItemDto struct {
-	Id         string `json:"id,omitempty"`
-	Title      string `json:"title,omitempty"`
-	Price      string `json:"price,omitempty"`
-	CurrencyId string `json:"currency_id,omitempty"`
-	Thumbnail  string `json:"thumbnail,omitempty"`
-	Permalink  string `json:"permalink,omitempty"`
-	StopTime   string `json:"stop_time,omitempty"`
+	Id          string `json:"id,omitempty"`
+	Title       string `json:"title,omitempty"`
+	Price       string `json:"price,omitempty"`
+	CurrencyId  string `json:"currency_id,omitempty"`
+	Thumbnail   string `json:"thumbnail,omitempty"`
+	Permalink   string `json:"permalink,omitempty"`
+	StopTime    string `json:"stop_time,omitempty"`
+	Description string `json:"description,omitempty"`
 }
 
 type FilterValueDto struct {
@@ -50,13 +51,14 @@ func (m item) GetView(searchResult *domain.SearchResult) *ModelDto {
 
 	for _, itemDomain := range searchResult.Results {
 		itemsDto = append(itemsDto, &ItemDto{
-			Id:         itemDomain.Id,
-			Title:      itemDomain.Title,
-			Price:      p.Sprintf("%d", int(itemDomain.Price)),
-			CurrencyId: itemDomain.CurrencyId,
-			Thumbnail:  strings.Replace(itemDomain.Thumbnail, "-I", "-C", 1),
-			Permalink:  itemDomain.Permalink,
-			StopTime:   itemDomain.StopTime,
+			Id:          itemDomain.Id,
+			Title:       itemDomain.Title,
+			Price:       p.Sprintf("%d", int(itemDomain.Price)),
+			CurrencyId:  itemDomain.CurrencyId,
+			Thumbnail:   strings.Replace(itemDomain.Thumbnail, "-I", "-C", 1),
+			Permalink:   itemDomain.Permalink,
+			StopTime:    itemDomain.StopTime,
+			Description: itemDomain.Description,
 		})
 	}
 
