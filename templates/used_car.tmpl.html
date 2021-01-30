@@ -17,11 +17,21 @@
 </head>
 
 <body class="bg-light">
-    <h2>{{.Title}}</h2>
+    <div class="container-fluid">
+        <nav class="navbar navbar-dark bg-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img src="/static/favicon.png" alt="" width="30" height="24"
+                        class="d-inline-block align-top">
+                    {{.Title}}
+                </a>
+            </div>
+        </nav>
+    </div>
     <div class="container-fluid">
         <div class="row">
             {{ range .Items }}
-            <div class="col-sm-2">
+            <div class="col-4">
                 <div class="card">
                     <a href="{{ .Permalink }}">
                         <img src="{{.Thumbnail}}" class="card-img-top">
