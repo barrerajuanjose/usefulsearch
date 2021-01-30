@@ -6,6 +6,8 @@
     <meta name="description" content={{.PageDescription}}
         data-head-react="true" />
 
+    <link rel="canonical" href="https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad">
+
     <meta name="google-site-verification" content="Y9bL5xOlXcTo2tWa5fJeJE2VDP4Vw8IibFMC4TNfZfM" />
 
     <link rel="apple-touch-icon" href="/static/favicon.png">
@@ -29,8 +31,8 @@
     
     <main>
         <section class="py-5 text-center container">
-            <form class="row">
-                <div class="col-6">
+            <form class="row py-lg-5">
+                <div class="col-lg-6 col-md-8 mx-auto">
                     <label for="brandSelect">Elegí la marca que estás buscando</label>
                     <select class="form-select form-select-lg mb-3" name="brand" id="brandSelect" onchange="this.form.submit()">
                         {{ range .BrandFilterValues }}
@@ -49,10 +51,10 @@
             <div class="container-fluid">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                     {{ range .Items }}
-                    <div class="col-4">
-                        <div class="card">
+                    <div class="col">
+                        <div class="card shadow-sm">
                             <a href="{{ .Permalink }}">
-                                <img src="{{.Thumbnail}}" class="card-img-top">
+                                <img src="{{.Thumbnail}}" class="card-img-top" preserveAspectRatio="xMidYMid slice" focusable="false">
                             </a>
                             <div class="card-body">
                                 <h5 class="card-title">{{ .Title }}</h5>
