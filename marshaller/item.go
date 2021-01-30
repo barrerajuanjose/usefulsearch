@@ -54,7 +54,7 @@ func (m item) GetView(searchResult *domain.SearchResult) *ModelDto {
 			Title:      itemDomain.Title,
 			Price:      p.Sprintf("%d", int(itemDomain.Price)),
 			CurrencyId: itemDomain.CurrencyId,
-			Thumbnail:  strings.Replace(itemDomain.Thumbnail, "-I", "-O", 1),
+			Thumbnail:  strings.Replace(itemDomain.Thumbnail, "-I", "-C", 1),
 			Permalink:  itemDomain.Permalink,
 			StopTime:   itemDomain.StopTime,
 		})
