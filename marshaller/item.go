@@ -74,6 +74,20 @@ func (m item) GetView(searchResult *domain.SearchResult) *ModelDto {
 		}
 	}
 
+	if len(brandFilterValues) == 0 {
+		brandFilterValues = append(brandFilterValues, &FilterValueDto{
+			Name:     "Selecciona una marca",
+			Value:    "",
+			Selected: true,
+		})
+	} else {
+		brandFilterValues = append(brandFilterValues, &FilterValueDto{
+			Name:     "Limpar selección",
+			Value:    "",
+			Selected: false,
+		})
+	}
+
 	for _, filtersDomaind := range searchResult.AvailableFilters {
 		if filtersDomaind.Id == "BRAND" {
 			for _, filtersValuesDomaind := range filtersDomaind.Values {
