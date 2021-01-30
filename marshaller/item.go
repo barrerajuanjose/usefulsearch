@@ -19,11 +19,18 @@ type ItemDto struct {
 	StopTime   string `json:"stop_time,omitempty"`
 }
 
+type FilterValueDto struct {
+	Name     string `json:"name,omitempty"`
+	Value    string `json:"value,omitempty"`
+	Selected bool   `json:"selected,omitempty"`
+}
+
 type ModelDto struct {
-	PageTitle       string     `json:"page_title,omitempty"`
-	PageDescription string     `json:"page_description,omitempty"`
-	Title           string     `json:"title,omitempty"`
-	Items           []*ItemDto `json:"items,omitempty"`
+	PageTitle         string            `json:"page_title,omitempty"`
+	PageDescription   string            `json:"page_description,omitempty"`
+	Title             string            `json:"title,omitempty"`
+	Items             []*ItemDto        `json:"items,omitempty"`
+	BrandFilterValues []*FilterValueDto `json:"brand_filter_values,omitempty"`
 }
 
 type Item interface {
@@ -53,10 +60,37 @@ func (m item) GetView(searchResult *domain.SearchResult) *ModelDto {
 		})
 	}
 
+	var brandFilterValues []*FilterValueDto
+
+	for _, filtersDomaind := range searchResult.Filters {
+		if filtersDomaind.Id == "BRAND" {
+			for _, filtersValuesDomaind := range filtersDomaind.Values {
+				brandFilterValues = append(brandFilterValues, &FilterValueDto{
+					Name:     filtersValuesDomaind.Name,
+					Value:    filtersValuesDomaind.Id,
+					Selected: true,
+				})
+			}
+		}
+	}
+
+	for _, filtersDomaind := range searchResult.AvailableFilters {
+		if filtersDomaind.Id == "BRAND" {
+			for _, filtersValuesDomaind := range filtersDomaind.Values {
+				brandFilterValues = append(brandFilterValues, &FilterValueDto{
+					Name:     filtersValuesDomaind.Name,
+					Value:    filtersValuesDomaind.Id,
+					Selected: false,
+				})
+			}
+		}
+	}
+
 	return &ModelDto{
-		PageTitle:       "Autos Usados Mercado Libre Útima Oportunidad",
-		PageDescription: "Publicaciones de autos usados que finalizan hoy, ideales para hacer una oferta!.",
-		Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
-		Items:           itemsDto,
+		PageTitle:         "Autos Usados Mercado Libre Útima Oportunidad",
+		PageDescription:   "Publicaciones de autos usados que finalizan hoy, ideales para hacer una oferta!.",
+		Title:             "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
+		Items:             itemsDto,
+		BrandFilterValues: brandFilterValues,
 	}
 }
