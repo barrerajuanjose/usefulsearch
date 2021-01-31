@@ -28,7 +28,7 @@ func main() {
 		c.String(200, "OK")
 	})
 
-	router.GET("/autos-usados-mercadolibre-ultima-oportunidad", getUsedCars.Get)
+	router.GET("/autos-usados-mercadolibre-ultima-oportunidad/", getUsedCars.Get)
 
 	router.Run(":" + port)
 }
