@@ -35,13 +35,9 @@
             <div class="row">
                 <div class="col">
                     <p>Buscar en otros paises</p>
-                    <a href="https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-argentina/">Argentina</a>
-                    <a href="https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-brasil/">Brasil</a>
-                    <a href="https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-mexico/">Mexico</a>
-                    <a href="https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-chile/">Chile</a>
-                    <a href="https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-uruguay/">Uruguay</a>
-                    <a href="https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-colombia/">Colombia</a>
-                    <a href="https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-venezuela/">Venezuela</a>
+                    {{ range .AvailableSites }}
+                    <a href="{{.Canonical}}">{{.Name}}</a>
+                    {{ end }}
                 </div>
             </div>
             <form class="row py-lg-5">

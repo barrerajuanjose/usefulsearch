@@ -21,10 +21,10 @@ type GetUsedCars interface {
 type getUsedCars struct {
 	itemMarshaller marshaller.Item
 	searchService  service.Search
-	configurations map[string]*config.SiteConfiguration
+	configurations []*config.SiteConfiguration
 }
 
-func NewGetUsedCars(configurations map[string]*config.SiteConfiguration, itemMarshaller marshaller.Item, searchService service.Search) GetUsedCars {
+func NewGetUsedCars(configurations []*config.SiteConfiguration, itemMarshaller marshaller.Item, searchService service.Search) GetUsedCars {
 	return &getUsedCars{
 		itemMarshaller: itemMarshaller,
 		searchService:  searchService,
@@ -40,17 +40,14 @@ func (s getUsedCars) Get(c *gin.Context) {
 	var siteConfig *config.SiteConfiguration
 
 	if siteId == "" {
-		for site, config := range s.configurations {
+		for _, config := range s.configurations {
 			if strings.Contains(c.Request.RequestURI, config.URI) {
-				if site == "default" {
-					siteId = "MLA"
-				} else {
-					siteId = site
-				}
 				siteConfig = config
 				break
 			}
 		}
+
+		siteId = siteConfig.SiteId
 	}
 
 	category := c.Query("category")
@@ -99,7 +96,7 @@ func (s getUsedCars) Get(c *gin.Context) {
 			viewChan <- &marshaller.ModelDto{}
 		default:
 			itemsDomain := <-searchChan
-			viewChan <- s.itemMarshaller.GetView(siteId, itemsDomain)
+			viewChan <- s.itemMarshaller.GetView(siteConfig, s.configurations, itemsDomain)
 		}
 	}()
 

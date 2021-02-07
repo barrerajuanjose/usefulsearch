@@ -40,81 +40,100 @@ func main() {
 	router.Run(":" + port)
 }
 
-func buildSiteConfiguration() map[string]*config.SiteConfiguration {
-	return map[string]*config.SiteConfiguration{
-		"MLA": {
+func buildSiteConfiguration() []*config.SiteConfiguration {
+	return []*config.SiteConfiguration{
+		{
+			SiteId:          "MLA",
+			Name:            "Argentina",
 			PageTitle:       "Autos Usados Mercado Libre Argentina Útima Oportunidad",
 			PageDescription: "Publicaciones de autos usados en Argentina que finalizan hoy, ideales para hacer una oferta!.",
 			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
-			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-argentina/",
-			BaseUrl:         "https://usefulsearch.herokuapp.com",
+			BaseUrl:         getBaseUrl(),
 			URI:             "/autos-usados-mercadolibre-ultima-oportunidad-argentina/",
 			CategoryId:      "MLA1744",
 			StateId:         "TUxBUENBUGw3M2E1",
 		},
-		"MLB": {
+		{
+			SiteId:          "MLB",
+			Name:            "Brasil",
 			PageTitle:       "Carros Usados Mercado Livre Brasil",
 			PageDescription: "Publicaciones de autos usados en Brasil que finalizan hoy, ideales para hacer una oferta!.",
 			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
-			Canonical:       "https://usefulsearch.herokuapp.com/carros-mercadolibre-ultima-oportunidad-brasil/",
-			BaseUrl:         "https://usefulsearch.herokuapp.com",
+			BaseUrl:         getBaseUrl(),
 			URI:             "/carros-mercadolibre-ultima-oportunidad-brasil/",
 			CategoryId:      "MLB1744",
 		},
-		"MLM": {
+		{
+			SiteId:          "MLM",
+			Name:            "México",
 			PageTitle:       "Carros Usados Mercado Libre México Útima Oportunidad",
 			PageDescription: "Publicaciones de autos usados en México que finalizan hoy, ideales para hacer una oferta!.",
 			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
-			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-mexico/",
-			BaseUrl:         "https://usefulsearch.herokuapp.com",
+			BaseUrl:         getBaseUrl(),
 			URI:             "/autos-usados-mercadolibre-ultima-oportunidad-mexico/",
 			CategoryId:      "MLM1744",
 		},
-		"MLC": {
+		{
+			SiteId:          "MLC",
+			Name:            "Chile",
 			PageTitle:       "Autos Usados Mercado Libre Chile Útima Oportunidad",
 			PageDescription: "Publicaciones de autos usados en Chile que finalizan hoy, ideales para hacer una oferta!.",
 			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
-			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-chile/",
-			BaseUrl:         "https://usefulsearch.herokuapp.com",
+			BaseUrl:         getBaseUrl(),
 			URI:             "/autos-usados-mercadolibre-ultima-oportunidad-chile/",
 			CategoryId:      "MLC1744",
 		},
-		"MLU": {
+		{
+			SiteId:          "MLU",
+			Name:            "Uruguay",
 			PageTitle:       "Autos Usados Mercado Libre Uruguay Útima Oportunidad",
 			PageDescription: "Publicaciones de autos usados en Uruguay que finalizan hoy, ideales para hacer una oferta!.",
 			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
-			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-uruguay/",
-			BaseUrl:         "https://usefulsearch.herokuapp.com",
+			BaseUrl:         getBaseUrl(),
 			URI:             "/autos-usados-mercadolibre-ultima-oportunidad-uruguay/",
 			CategoryId:      "MLU1744",
 		},
-		"MCO": {
-			PageTitle:       "Autos Usados Mercado Libre Colombia Útima Oportunidad",
+		{
+			SiteId:          "MCO",
+			Name:            "Colombia",
+			PageTitle:       "Carros Usados Mercado Libre Colombia Útima Oportunidad",
 			PageDescription: "Publicaciones de autos usados en Colombia que finalizan hoy, ideales para hacer una oferta!.",
-			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
-			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-colombia/",
-			BaseUrl:         "https://usefulsearch.herokuapp.com",
-			URI:             "/autos-usados-mercadolibre-ultima-oportunidad-colombia/",
+			Title:           "Carros usados en Mercado Libre! Ultima oportunidad para comprarlos",
+			BaseUrl:         getBaseUrl(),
+			URI:             "/carros-usados-mercadolibre-ultima-oportunidad-colombia/",
 			CategoryId:      "MCO1744",
 		},
-		"MLV": {
-			PageTitle:       "Autos Usados Mercado Libre Venezuela Útima Oportunidad",
+		{
+			SiteId:          "MLV",
+			Name:            "Venezuela",
+			PageTitle:       "Carros Usados Mercado Libre Venezuela Útima Oportunidad",
 			PageDescription: "Publicaciones de autos usados en Venezuela que finalizan hoy, ideales para hacer una oferta!.",
-			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
-			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-venezuela/",
-			BaseUrl:         "https://usefulsearch.herokuapp.com",
-			URI:             "/autos-usados-mercadolibre-ultima-oportunidad-venezuela/",
+			Title:           "Carros usados en Mercado Libre! Ultima oportunidad para comprarlos",
+			BaseUrl:         getBaseUrl(),
+			URI:             "/carros-usados-mercadolibre-ultima-oportunidad-venezuela/",
 			CategoryId:      "MLV1744",
 		},
-		"default": {
+		{
+			SiteId:          "MLA",
+			Name:            "Argentina",
 			PageTitle:       "Autos Usados Mercado Libre Útima Oportunidad",
 			PageDescription: "Publicaciones de autos usados que finalizan hoy, ideales para hacer una oferta!.",
 			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
-			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad/",
-			BaseUrl:         "https://usefulsearch.herokuapp.com",
+			BaseUrl:         getBaseUrl(),
 			URI:             "/autos-usados-mercadolibre-ultima-oportunidad/",
 			CategoryId:      "MLA1744",
 			StateId:         "TUxBUENBUGw3M2E1",
+			IsDefault:       true,
 		},
 	}
+}
+
+func getBaseUrl() string {
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		return "http://localhost:8080"
+	}
+
+	return "https://usefulsearch.herokuapp.com"
 }

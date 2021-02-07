@@ -1,7 +1,8 @@
 package config
 
 type SiteConfiguration struct {
-	Canonical       string
+	SiteId          string
+	Name            string
 	PageTitle       string
 	PageDescription string
 	Title           string
@@ -9,4 +10,5 @@ type SiteConfiguration struct {
 	URI             string
 	CategoryId      string
 	StateId         string
+	IsDefault       bool
 }

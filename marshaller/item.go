@@ -6,6 +6,7 @@ import (
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 
+	"github.com/barrerajuanjose/usefulsearch/config"
 	"github.com/barrerajuanjose/usefulsearch/domain"
 )
 
@@ -31,6 +32,7 @@ type ModelDto struct {
 	Items             []*ItemDto            `json:"items,omitempty"`
 	BrandFilterValues []*FilterValueDto     `json:"brand_filter_values,omitempty"`
 	StateFilterValues []*FilterValueDto     `json:"state_filter_values,omitempty"`
+	AvailableSites    []*SiteDto            `json:"available_sites,omitempty"`
 }
 
 type SiteConfigurationDto struct {
@@ -40,8 +42,13 @@ type SiteConfigurationDto struct {
 	Title           string `json:"title,omitempty"`
 }
 
+type SiteDto struct {
+	Canonical string `json:"canonical,omitempty"`
+	Name      string `json:"name,omitempty"`
+}
+
 type Item interface {
-	GetView(siteId string, searchResult *domain.SearchResult) *ModelDto
+	GetView(siteConfig *config.SiteConfiguration, avaiblableSites []*config.SiteConfiguration, searchResult *domain.SearchResult) *ModelDto
 }
 
 type item struct {
@@ -51,7 +58,7 @@ func NewItem() Item {
 	return &item{}
 }
 
-func (m item) GetView(siteId string, searchResult *domain.SearchResult) *ModelDto {
+func (m item) GetView(siteConfig *config.SiteConfiguration, avaiblableConfigurationSites []*config.SiteConfiguration, searchResult *domain.SearchResult) *ModelDto {
 	var itemsDto []*ItemDto
 	p := message.NewPrinter(language.BrazilianPortuguese)
 
@@ -72,72 +79,36 @@ func (m item) GetView(siteId string, searchResult *domain.SearchResult) *ModelDt
 	stateFilterValues := buildFilter("state", searchResult.Filters, searchResult.AvailableFilters)
 
 	return &ModelDto{
-		SiteConfiguration: buildSiteConfiguration(siteId),
+		SiteConfiguration: buildSiteConfiguration(siteConfig),
 		Items:             itemsDto,
 		BrandFilterValues: brandFilterValues,
 		StateFilterValues: stateFilterValues,
+		AvailableSites:    buildAvailableSites(siteConfig, avaiblableConfigurationSites),
 	}
 }
 
-func buildSiteConfiguration(siteId string) *SiteConfigurationDto {
-	switch siteId {
-	case "MLA":
-		return &SiteConfigurationDto{
-			PageTitle:       "Autos Usados Mercado Libre Argentina Útima Oportunidad",
-			PageDescription: "Publicaciones de autos usados en Argentina que finalizan hoy, ideales para hacer una oferta!.",
-			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
-			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-argentina/",
-		}
-	case "MLB":
-		return &SiteConfigurationDto{
-			PageTitle:       "Carros Usados Mercado Livre Brasil",
-			PageDescription: "Publicaciones de autos usados en Brasil que finalizan hoy, ideales para hacer una oferta!.",
-			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
-			Canonical:       "https://usefulsearch.herokuapp.com/carros-mercadolibre-ultima-oportunidad-brasil/",
-		}
-	case "MLM":
-		return &SiteConfigurationDto{
-			PageTitle:       "Carros Usados Mercado Libre México Útima Oportunidad",
-			PageDescription: "Publicaciones de autos usados en México que finalizan hoy, ideales para hacer una oferta!.",
-			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
-			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-mexico/",
-		}
-	case "MLC":
-		return &SiteConfigurationDto{
-			PageTitle:       "Autos Usados Mercado Libre Chile Útima Oportunidad",
-			PageDescription: "Publicaciones de autos usados en Chile que finalizan hoy, ideales para hacer una oferta!.",
-			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
-			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-chile/",
-		}
-	case "MLU":
-		return &SiteConfigurationDto{
-			PageTitle:       "Autos Usados Mercado Libre Uruguay Útima Oportunidad",
-			PageDescription: "Publicaciones de autos usados en Uruguay que finalizan hoy, ideales para hacer una oferta!.",
-			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
-			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-uruguay/",
-		}
-	case "MCO":
-		return &SiteConfigurationDto{
-			PageTitle:       "Autos Usados Mercado Libre Colombia Útima Oportunidad",
-			PageDescription: "Publicaciones de autos usados en Colombia que finalizan hoy, ideales para hacer una oferta!.",
-			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
-			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-colombia/",
-		}
-	case "MLV":
-		return &SiteConfigurationDto{
-			PageTitle:       "Autos Usados Mercado Libre Venezuela Útima Oportunidad",
-			PageDescription: "Publicaciones de autos usados en Venezuela que finalizan hoy, ideales para hacer una oferta!.",
-			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
-			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-venezuela/",
-		}
-	default:
-		return &SiteConfigurationDto{
-			PageTitle:       "Autos Usados Mercado Libre Útima Oportunidad",
-			PageDescription: "Publicaciones de autos usados que finalizan hoy, ideales para hacer una oferta!.",
-			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
-			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad/",
+func buildSiteConfiguration(siteConfig *config.SiteConfiguration) *SiteConfigurationDto {
+	return &SiteConfigurationDto{
+		PageTitle:       siteConfig.PageTitle,
+		PageDescription: siteConfig.PageDescription,
+		Title:           siteConfig.Title,
+		Canonical:       siteConfig.BaseUrl + siteConfig.URI,
+	}
+}
+
+func buildAvailableSites(currentSiteConfig *config.SiteConfiguration, avaiblableConfigurationSites []*config.SiteConfiguration) []*SiteDto {
+	var sitesDto []*SiteDto
+
+	for _, availableConfigurationSite := range avaiblableConfigurationSites {
+		if currentSiteConfig.SiteId != availableConfigurationSite.SiteId && !availableConfigurationSite.IsDefault {
+			sitesDto = append(sitesDto, &SiteDto{
+				Canonical: availableConfigurationSite.BaseUrl + availableConfigurationSite.URI,
+				Name:      availableConfigurationSite.Name,
+			})
 		}
 	}
+
+	return sitesDto
 }
 
 func buildFilter(filterId string, filters []*domain.SearchFilter, availavleFilters []*domain.SearchFilter) []*FilterValueDto {
