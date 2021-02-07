@@ -73,5 +73,9 @@ func (c getUsedCars) Get(ctx *gin.Context) {
 		viewChan <- c.itemMarshaller.GetView(itemsDomain)
 	}()
 
-	ctx.HTML(http.StatusOK, "used_car.tmpl.html", <-viewChan)
+	if ctx.GetHeader("accept") == "application/json" {
+		ctx.JSON(http.StatusOK, <-viewChan)
+	} else {
+		ctx.HTML(http.StatusOK, "used_car.tmpl.html", <-viewChan)
+	}
 }
