@@ -3,9 +3,11 @@ package controller
 import (
 	"context"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 
+	"github.com/barrerajuanjose/usefulsearch/config"
 	"github.com/barrerajuanjose/usefulsearch/domain"
 	"github.com/barrerajuanjose/usefulsearch/marshaller"
 	"github.com/barrerajuanjose/usefulsearch/service"
@@ -19,12 +21,14 @@ type GetUsedCars interface {
 type getUsedCars struct {
 	itemMarshaller marshaller.Item
 	searchService  service.Search
+	configurations map[string]*config.SiteConfiguration
 }
 
-func NewGetUsedCars(itemMarshaller marshaller.Item, searchService service.Search) GetUsedCars {
+func NewGetUsedCars(configurations map[string]*config.SiteConfiguration, itemMarshaller marshaller.Item, searchService service.Search) GetUsedCars {
 	return &getUsedCars{
 		itemMarshaller: itemMarshaller,
 		searchService:  searchService,
+		configurations: configurations,
 	}
 }
 
@@ -33,14 +37,25 @@ func (s getUsedCars) Get(c *gin.Context) {
 	defer cancel()
 
 	siteId := c.Query("site_id")
+	var siteConfig *config.SiteConfiguration
 
 	if siteId == "" {
-		siteId = "MLA"
+		for site, config := range s.configurations {
+			if strings.Contains(c.Request.RequestURI, config.URI) {
+				if site == "default" {
+					siteId = "MLA"
+				} else {
+					siteId = site
+				}
+				siteConfig = config
+				break
+			}
+		}
 	}
 
 	category := c.Query("category")
 	if category == "" {
-		category = "MLA1744"
+		category = siteConfig.CategoryId
 	}
 
 	brand := c.Query("brand")
@@ -50,7 +65,7 @@ func (s getUsedCars) Get(c *gin.Context) {
 
 	stateId := c.Query("state_id")
 	if stateId == "" {
-		stateId = "TUxBUENBUGw3M2E1"
+		stateId = siteConfig.StateId
 	} else if stateId == "clean" {
 		stateId = ""
 	}
