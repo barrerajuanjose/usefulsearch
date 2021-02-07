@@ -84,7 +84,7 @@ func (s getUsedCars) Get(c *gin.Context) {
 			viewChan <- &marshaller.ModelDto{}
 		default:
 			itemsDomain := <-searchChan
-			viewChan <- s.itemMarshaller.GetView(itemsDomain)
+			viewChan <- s.itemMarshaller.GetView(siteId, itemsDomain)
 		}
 	}()
 

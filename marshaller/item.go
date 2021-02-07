@@ -27,16 +27,21 @@ type FilterValueDto struct {
 }
 
 type ModelDto struct {
-	PageTitle         string            `json:"page_title,omitempty"`
-	PageDescription   string            `json:"page_description,omitempty"`
-	Title             string            `json:"title,omitempty"`
-	Items             []*ItemDto        `json:"items,omitempty"`
-	BrandFilterValues []*FilterValueDto `json:"brand_filter_values,omitempty"`
-	StateFilterValues []*FilterValueDto `json:"state_filter_values,omitempty"`
+	SiteConfiguration *SiteConfigurationDto `json:"site_configuration,omitempty"`
+	Items             []*ItemDto            `json:"items,omitempty"`
+	BrandFilterValues []*FilterValueDto     `json:"brand_filter_values,omitempty"`
+	StateFilterValues []*FilterValueDto     `json:"state_filter_values,omitempty"`
+}
+
+type SiteConfigurationDto struct {
+	Canonical       string `json:"canonical,omitempty"`
+	PageTitle       string `json:"page_title,omitempty"`
+	PageDescription string `json:"page_description,omitempty"`
+	Title           string `json:"title,omitempty"`
 }
 
 type Item interface {
-	GetView(searchResult *domain.SearchResult) *ModelDto
+	GetView(siteId string, searchResult *domain.SearchResult) *ModelDto
 }
 
 type item struct {
@@ -46,7 +51,7 @@ func NewItem() Item {
 	return &item{}
 }
 
-func (m item) GetView(searchResult *domain.SearchResult) *ModelDto {
+func (m item) GetView(siteId string, searchResult *domain.SearchResult) *ModelDto {
 	var itemsDto []*ItemDto
 	p := message.NewPrinter(language.BrazilianPortuguese)
 
@@ -67,12 +72,71 @@ func (m item) GetView(searchResult *domain.SearchResult) *ModelDto {
 	stateFilterValues := buildFilter("state", searchResult.Filters, searchResult.AvailableFilters)
 
 	return &ModelDto{
-		PageTitle:         "Autos Usados Mercado Libre Útima Oportunidad",
-		PageDescription:   "Publicaciones de autos usados que finalizan hoy, ideales para hacer una oferta!.",
-		Title:             "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
+		SiteConfiguration: buildSiteConfiguration(siteId),
 		Items:             itemsDto,
 		BrandFilterValues: brandFilterValues,
 		StateFilterValues: stateFilterValues,
+	}
+}
+
+func buildSiteConfiguration(siteId string) *SiteConfigurationDto {
+	switch siteId {
+	case "MLA":
+		return &SiteConfigurationDto{
+			PageTitle:       "Autos Usados Mercado Libre Argentina Útima Oportunidad",
+			PageDescription: "Publicaciones de autos usados en Argentina que finalizan hoy, ideales para hacer una oferta!.",
+			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
+			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-argentina/",
+		}
+	case "MLB":
+		return &SiteConfigurationDto{
+			PageTitle:       "Carros Usados Mercado Livre Brasil",
+			PageDescription: "Publicaciones de autos usados en Brasil que finalizan hoy, ideales para hacer una oferta!.",
+			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
+			Canonical:       "https://usefulsearch.herokuapp.com/carros-mercadolibre-ultima-oportunidad-brasil/",
+		}
+	case "MLM":
+		return &SiteConfigurationDto{
+			PageTitle:       "Carros Usados Mercado Libre México Útima Oportunidad",
+			PageDescription: "Publicaciones de autos usados en México que finalizan hoy, ideales para hacer una oferta!.",
+			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
+			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-mexico/",
+		}
+	case "MLC":
+		return &SiteConfigurationDto{
+			PageTitle:       "Autos Usados Mercado Libre Chile Útima Oportunidad",
+			PageDescription: "Publicaciones de autos usados en Chile que finalizan hoy, ideales para hacer una oferta!.",
+			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
+			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-chile/",
+		}
+	case "MLU":
+		return &SiteConfigurationDto{
+			PageTitle:       "Autos Usados Mercado Libre Uruguay Útima Oportunidad",
+			PageDescription: "Publicaciones de autos usados en Uruguay que finalizan hoy, ideales para hacer una oferta!.",
+			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
+			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-uruguay/",
+		}
+	case "MCO":
+		return &SiteConfigurationDto{
+			PageTitle:       "Autos Usados Mercado Libre Colombia Útima Oportunidad",
+			PageDescription: "Publicaciones de autos usados en Colombia que finalizan hoy, ideales para hacer una oferta!.",
+			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
+			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-colombia/",
+		}
+	case "MLV":
+		return &SiteConfigurationDto{
+			PageTitle:       "Autos Usados Mercado Libre Venezuela Útima Oportunidad",
+			PageDescription: "Publicaciones de autos usados en Venezuela que finalizan hoy, ideales para hacer una oferta!.",
+			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
+			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-venezuela/",
+		}
+	default:
+		return &SiteConfigurationDto{
+			PageTitle:       "Autos Usados Mercado Libre Útima Oportunidad",
+			PageDescription: "Publicaciones de autos usados que finalizan hoy, ideales para hacer una oferta!.",
+			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
+			Canonical:       "https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad/",
+		}
 	}
 }
 

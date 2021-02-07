@@ -2,12 +2,12 @@
 <html>
 
 <head profile="http://www.w3.org/2005/10/profile">
-    <title>{{.PageTitle}}</title>
-    <meta name="description" content={{.PageDescription}}
+    <title>{{.SiteConfiguration.PageTitle}}</title>
+    <meta name="description" content="{{.SiteConfiguration.PageDescription}}"
         data-head-react="true" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="canonical" href="https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad/">
+    <link rel="canonical" href="{{.SiteConfiguration.Canonical}}">
 
     <meta name="google-site-verification" content="Y9bL5xOlXcTo2tWa5fJeJE2VDP4Vw8IibFMC4TNfZfM" />
 
@@ -24,7 +24,7 @@
             <div class="container">
                 <a href="#" class="navbar-brand d-flex align-items-center">
                     <img src="/static/favicon.png" alt="" width="30" height="24" class="d-inline-block align-top">
-                    <strong>{{.Title}}</strong>
+                    <strong>{{.SiteConfiguration.Title}}</strong>
                 </a>
             </div>
         </div>
@@ -32,6 +32,18 @@
     
     <main>
         <section class="py-5 text-center container">
+            <div class="row">
+                <div class="col">
+                    <p>Buscar en otros paises</p>
+                    <a href="https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-argentina/">Argentina</a>
+                    <a href="https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-brasil/">Brasil</a>
+                    <a href="https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-mexico/">Mexico</a>
+                    <a href="https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-chile/">Chile</a>
+                    <a href="https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-uruguay/">Uruguay</a>
+                    <a href="https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-colombia/">Colombia</a>
+                    <a href="https://usefulsearch.herokuapp.com/autos-usados-mercadolibre-ultima-oportunidad-venezuela/">Venezuela</a>
+                </div>
+            </div>
             <form class="row py-lg-5">
                 <div class="col-lg-6 col-md-8 mx-auto">
                     <label for="brandSelect">Elegí la marca que estás buscando</label>
