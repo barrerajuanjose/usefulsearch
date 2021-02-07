@@ -1,8 +1,10 @@
 package controller
 
 import (
+	"context"
 	"net/http"
 	"sync"
+	"time"
 
 	"github.com/barrerajuanjose/usefulsearch/domain"
 	"github.com/barrerajuanjose/usefulsearch/marshaller"
@@ -26,31 +28,34 @@ func NewGetUsedCars(itemMarshaller marshaller.Item, searchService service.Search
 	}
 }
 
-func (c getUsedCars) Get(ctx *gin.Context) {
-	siteId := ctx.Query("site_id")
+func (s getUsedCars) Get(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	siteId := c.Query("site_id")
 
 	if siteId == "" {
 		siteId = "MLA"
 	}
 
-	category := ctx.Query("category")
+	category := c.Query("category")
 	if category == "" {
 		category = "MLA1744"
 	}
 
-	brand := ctx.Query("brand")
+	brand := c.Query("brand")
 	if brand == "clean" {
 		brand = ""
 	}
 
-	stateId := ctx.Query("state_id")
+	stateId := c.Query("state_id")
 	if stateId == "" {
 		stateId = "TUxBUENBUGw3M2E1"
 	} else if stateId == "clean" {
 		stateId = ""
 	}
 
-	model := ctx.Query("model")
+	model := c.Query("model")
 
 	searchChan := make(chan *domain.SearchResult, 1)
 	viewChan := make(chan *marshaller.ModelDto, 1)
@@ -61,21 +66,31 @@ func (c getUsedCars) Get(ctx *gin.Context) {
 	go func() {
 		defer wg.Done()
 		defer close(searchChan)
-		searchResult := c.searchService.GetEndTodayItems(siteId, stateId, category, brand, model)
-		searchChan <- searchResult
+		select {
+		case <-ctx.Done():
+			searchChan <- &domain.SearchResult{}
+		default:
+			searchResult := s.searchService.GetEndTodayItems(siteId, stateId, category, brand, model)
+			searchChan <- searchResult
+		}
 	}()
 
 	go func() {
 		defer close(viewChan)
 		wg.Wait()
 
-		itemsDomain := <-searchChan
-		viewChan <- c.itemMarshaller.GetView(itemsDomain)
+		select {
+		case <-ctx.Done():
+			viewChan <- &marshaller.ModelDto{}
+		default:
+			itemsDomain := <-searchChan
+			viewChan <- s.itemMarshaller.GetView(itemsDomain)
+		}
 	}()
 
-	if ctx.GetHeader("accept") == "application/json" {
-		ctx.JSON(http.StatusOK, <-viewChan)
+	if c.GetHeader("accept") == "application/json" {
+		c.JSON(http.StatusOK, <-viewChan)
 	} else {
-		ctx.HTML(http.StatusOK, "used_car.tmpl.html", <-viewChan)
+		c.HTML(http.StatusOK, "used_car.tmpl.html", <-viewChan)
 	}
 }
