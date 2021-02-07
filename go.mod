@@ -4,6 +4,7 @@ module github.com/barrerajuanjose/usefulsearch
 go 1.15
 
 require (
+	github.com/gin-contrib/gzip v0.0.3 // indirect
 	github.com/gin-gonic/gin v1.6.3
 	github.com/heroku/x v0.0.25
 	golang.org/x/text v0.3.2

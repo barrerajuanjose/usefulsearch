@@ -6,6 +6,7 @@ import (
 	"github.com/barrerajuanjose/usefulsearch/controller"
 	"github.com/barrerajuanjose/usefulsearch/marshaller"
 	"github.com/barrerajuanjose/usefulsearch/service"
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
 )
@@ -21,6 +22,7 @@ func main() {
 	router.Use(gin.Logger())
 	router.LoadHTMLGlob("templates/*.tmpl.html")
 	router.Static("/static", "static")
+	router.Use(gzip.Gzip(gzip.DefaultCompression))
 
 	getUsedCars := controller.NewGetUsedCars(marshaller.NewItem(), service.NewSearch())
 
