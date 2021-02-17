@@ -47,18 +47,25 @@ type SiteDto struct {
 	Name      string `json:"name,omitempty"`
 }
 
-type Item interface {
-	GetView(siteConfig *config.SiteConfiguration, avaiblableSites []*config.SiteConfiguration, searchResult *domain.SearchResult) *ModelDto
+type Page interface {
+	GetIndex(siteConfig *config.SiteConfiguration, avaiblableSites []*config.SiteConfiguration) *ModelDto
+	GetUsefulPage(siteConfig *config.SiteConfiguration, avaiblableSites []*config.SiteConfiguration, searchResult *domain.SearchResult) *ModelDto
 }
 
-type item struct {
+type page struct {
 }
 
-func NewItem() Item {
-	return &item{}
+func NewPage() Page {
+	return &page{}
+}
+func (m page) GetIndex(siteConfig *config.SiteConfiguration, avaiblableConfigurationSites []*config.SiteConfiguration) *ModelDto {
+	return &ModelDto{
+		SiteConfiguration: buildSiteConfiguration(siteConfig),
+		AvailableSites:    buildAllAvailableSites(avaiblableConfigurationSites),
+	}
 }
 
-func (m item) GetView(siteConfig *config.SiteConfiguration, avaiblableConfigurationSites []*config.SiteConfiguration, searchResult *domain.SearchResult) *ModelDto {
+func (m page) GetUsefulPage(siteConfig *config.SiteConfiguration, avaiblableConfigurationSites []*config.SiteConfiguration, searchResult *domain.SearchResult) *ModelDto {
 	var itemsDto []*ItemDto
 	p := message.NewPrinter(language.BrazilianPortuguese)
 
@@ -106,6 +113,19 @@ func buildAvailableSites(currentSiteConfig *config.SiteConfiguration, avaiblable
 				Name:      availableConfigurationSite.Name,
 			})
 		}
+	}
+
+	return sitesDto
+}
+
+func buildAllAvailableSites(avaiblableConfigurationSites []*config.SiteConfiguration) []*SiteDto {
+	var sitesDto []*SiteDto
+
+	for _, availableConfigurationSite := range avaiblableConfigurationSites {
+		sitesDto = append(sitesDto, &SiteDto{
+			Canonical: availableConfigurationSite.BaseUrl + availableConfigurationSite.URI,
+			Name:      availableConfigurationSite.Name,
+		})
 	}
 
 	return sitesDto

@@ -26,12 +26,12 @@ func main() {
 	router.Use(gzip.Gzip(gzip.DefaultCompression))
 
 	configurations := buildSiteConfiguration()
+	pageMarshaller := marshaller.NewPage()
 
-	getUsedCars := controller.NewGetUsedCars(configurations, marshaller.NewItem(), service.NewSearch())
+	getIndex := controller.NewGetIndex(configurations, pageMarshaller)
+	getUsedCars := controller.NewGetUsedCars(configurations, pageMarshaller, service.NewSearch())
 
-	router.GET("/", func(c *gin.Context) {
-		c.String(200, "OK")
-	})
+	router.GET("/", getIndex.Get)
 
 	for _, config := range configurations {
 		router.GET(config.URI, getUsedCars.Get)
@@ -52,6 +52,7 @@ func buildSiteConfiguration() []*config.SiteConfiguration {
 			URI:             "/autos-usados-mercadolibre-ultima-oportunidad-argentina/",
 			CategoryId:      "MLA1744",
 			StateId:         "TUxBUENBUGw3M2E1",
+			IsDefault:       true,
 		},
 		{
 			SiteId:          "MLB",
@@ -112,18 +113,6 @@ func buildSiteConfiguration() []*config.SiteConfiguration {
 			BaseUrl:         getBaseUrl(),
 			URI:             "/carros-usados-mercadolibre-ultima-oportunidad-venezuela/",
 			CategoryId:      "MLV1744",
-		},
-		{
-			SiteId:          "MLA",
-			Name:            "Argentina",
-			PageTitle:       "Autos Usados Mercado Libre Útima Oportunidad",
-			PageDescription: "Publicaciones de autos usados que finalizan hoy, ideales para hacer una oferta!.",
-			Title:           "Autos usados en Mercado Libre! Ultima oportunidad para comprarlos",
-			BaseUrl:         getBaseUrl(),
-			URI:             "/autos-usados-mercadolibre-ultima-oportunidad/",
-			CategoryId:      "MLA1744",
-			StateId:         "TUxBUENBUGw3M2E1",
-			IsDefault:       true,
 		},
 	}
 }

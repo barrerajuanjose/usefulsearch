@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+
+<head profile="http://www.w3.org/2005/10/profile">
+    <title>{{.SiteConfiguration.PageTitle}}</title>
+    <meta name="description" content="{{.SiteConfiguration.PageDescription}}" data-head-react="true" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="canonical" href="{{.SiteConfiguration.Canonical}}">
+
+    <meta name="google-site-verification" content="Y9bL5xOlXcTo2tWa5fJeJE2VDP4Vw8IibFMC4TNfZfM" />
+
+    <link rel="apple-touch-icon" href="/static/favicon.png">
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/static/favicon.png">
+    <link rel="shortcut icon" href="/static/favicon.png">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+</head>
+
+<body>
+    <header>
+        <div class="navbar navbar-dark bg-dark shadow-sm">
+            <div class="container">
+                <a href="#" class="navbar-brand d-flex align-items-center">
+                    <img src="/static/favicon.png" alt="" width="30" height="24" class="d-inline-block align-top">
+                    <strong>{{.SiteConfiguration.Title}}</strong>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="py-5 text-center container">
+            <div class="row">
+                <div class="col">
+                    <p>Paises disponible para encontrar tu auto</p>
+                    {{ range .AvailableSites }}
+                    <a href="{{.Canonical}}">{{.Name}}</a>
+                    {{ end }}
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+<html>

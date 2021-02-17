@@ -32,14 +32,6 @@
     
     <main>
         <section class="py-5 text-center container">
-            <div class="row">
-                <div class="col">
-                    <p>Buscar en otros paises</p>
-                    {{ range .AvailableSites }}
-                    <a href="{{.Canonical}}">{{.Name}}</a>
-                    {{ end }}
-                </div>
-            </div>
             <form class="row py-lg-5">
                 <div class="col-lg-6 col-md-8 mx-auto">
                     <label for="brandSelect">Elegí la marca que estás buscando</label>
